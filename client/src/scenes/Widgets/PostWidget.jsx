@@ -10,7 +10,8 @@ import {
   import WidgetWrapper from "components/WidgetWrapper";
   import { useState } from "react";
   import { useDispatch, useSelector } from "react-redux";
-  import { setPost } from "state";
+  import { setPost, setPosts } from "state";
+  import DeleteIcon from '@mui/icons-material/Delete';
   
   const PostWidget = ({
     postId,
@@ -22,6 +23,7 @@ import {
     userPicturePath,
     likes,
     comments,
+    isProfile
   }) => {
     const [isComments, setIsComments] = useState(false);
     const dispatch = useDispatch();
@@ -47,6 +49,31 @@ import {
       dispatch(setPost({ post: updatedPost }));
     };
     // above, patch api request, then dispatches the setPost action (see state.js) with the updated post (updating the likes immediately)
+
+    const deletePost = async() => {
+      const response = await fetch(`http://localhost:3001/posts/delete/${postId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      })
+      await response.json();
+
+      if(response.ok){
+        alert("Blog deleted")
+        const getPosts = async () => {
+          const response = await fetch("http://localhost:3001/posts", {
+            method: "GET",
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const data = await response.json();
+          dispatch(setPosts({ posts: data }));
+        };
+        getPosts();
+      }
+    }
+    // deletePost called on delete button, then refetches posts, to automatically refresh the posts
 
     return (
       <WidgetWrapper m="2rem 0">
@@ -95,9 +122,23 @@ import {
             </FlexBetween>
           </FlexBetween>
   
-          <IconButton>
+          {loggedInUserId === postUserId || isProfile ? ( // only shows delete button if it's your own post
+                    <>
+                    <IconButton>
+                      <ShareOutlined />
+                    </IconButton>
+                    <IconButton>
+                      <DeleteIcon
+                      onClick={deletePost}
+                      />
+                  </IconButton>
+                    </>  
+                      
+          ) : (
+            <IconButton>
             <ShareOutlined />
           </IconButton>
+          )}
         </FlexBetween>
         {isComments && (
           <Box mt="0.5rem">
