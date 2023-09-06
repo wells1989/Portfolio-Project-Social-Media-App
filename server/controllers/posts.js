@@ -79,6 +79,45 @@ export const likePost = async (req, res) => {
     }
 }
 
+// could also add update post, using above logic (but opted to focus on new features / functionality, esp given the ease of deleting and reposting)
+
+export const addComment = async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id);
+
+        post.comments.push(req.body.comment)
+
+        const updatedPost = await Post.findByIdAndUpdate(
+            req.params.id,
+            { comments: post.comments },
+            { new: true }  
+          );
+          res.status(200).json(updatedPost);
+
+    } catch (error) {
+        res.status(404).json({ message: err.message })
+    }
+}
+// pushes new comment to end of comment array, NOTE: Need the update part to make the changes stick
+
+export const deleteComment = async(req, res) => {
+    try {
+        const post = await Post.findById(req.params.id);
+
+        const newComments = post.comments.filter((comment) => comment !== req.body.comment)
+
+        const updatedPost = await Post.findByIdAndUpdate(
+            req.params.id,
+            { comments: newComments },
+            { new: true }  
+          );
+          res.status(200).json(updatedPost);
+    } catch (error) {
+        res.status(404).json({ message: err.message })
+    }
+}
+// filters comment out of comments array, NOTE: Need the update part to make the changes stick
+
 export const deletePost = async (req, res) => {
     try {
         const post = await Post.findByIdAndDelete(req.params.id)
@@ -91,3 +130,17 @@ export const deletePost = async (req, res) => {
     }
 }
 
+export const searchQuery = async (req,res) => {
+    try {
+        const results = await Post.find({"description": "second"})
+
+        res.status(200).json(results)
+    } catch (error) {
+        res.status(404).send(error)
+    }
+}
+ /*
+const { userId } = req.params;
+const post = await Post.find({ userId });
+res.status(200).json(post);
+*/

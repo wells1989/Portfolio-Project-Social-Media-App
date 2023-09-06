@@ -12,6 +12,8 @@ import {
   import { useDispatch, useSelector } from "react-redux";
   import { setPost, setPosts } from "state";
   import DeleteIcon from '@mui/icons-material/Delete';
+  import AddCommentIcon from '@mui/icons-material/AddComment';
+  import { InputBase } from '@mui/material';
   
   const PostWidget = ({
     postId,
@@ -26,6 +28,7 @@ import {
     isProfile
   }) => {
     const [isComments, setIsComments] = useState(false);
+    const [comment, setComment] = useState("");
     const dispatch = useDispatch();
     const token = useSelector((state) => state.token);
     const loggedInUserId = useSelector((state) => state.user._id); // gets the logged in user id from state
@@ -50,6 +53,15 @@ import {
     };
     // above, patch api request, then dispatches the setPost action (see state.js) with the updated post (updating the likes immediately)
 
+    const getPosts = async () => {
+      const response = await fetch("http://localhost:3001/posts", {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await response.json();
+      dispatch(setPosts({ posts: data }));
+    };
+
     const deletePost = async() => {
       const response = await fetch(`http://localhost:3001/posts/delete/${postId}`, {
         method: "DELETE",
@@ -61,19 +73,28 @@ import {
       await response.json();
 
       if(response.ok){
-        alert("Blog deleted")
-        const getPosts = async () => {
-          const response = await fetch("http://localhost:3001/posts", {
-            method: "GET",
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          const data = await response.json();
-          dispatch(setPosts({ posts: data }));
-        };
+        alert("Post deleted")
         getPosts();
       }
     }
     // deletePost called on delete button, then refetches posts, to automatically refresh the posts
+
+    const addComment = async () => {
+      const response = await fetch (`http://localhost:3001/posts/comments/${postId}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ comment: comment }),
+      });
+      await response.json();
+
+      if(response.ok){
+        getPosts();
+        setComment("");
+      }
+    }
 
     return (
       <WidgetWrapper m="2rem 0">
@@ -114,11 +135,24 @@ import {
             </FlexBetween>
   
               {/*Comments button and dropdown menu*/}
-            <FlexBetween gap="0.3rem">
+            <FlexBetween gap="0.5rem">
               <IconButton onClick={() => setIsComments(!isComments)}>
                 <ChatBubbleOutlineOutlined />
               </IconButton>
               <Typography>{comments.length}</Typography>
+              <InputBase
+                placeholder="Add Comment..."
+                onChange={(e) => setComment(e.target.value)}
+                 value={comment}
+                 sx={{
+                    width: "60%",
+                    backgroundColor: palette.neutral.light,
+                    borderRadius: "0.5rem",
+                    padding: "0.5rem 0.5rem"
+                 }}/>
+              <IconButton>
+                <AddCommentIcon onClick={addComment}/>
+              </IconButton>
             </FlexBetween>
           </FlexBetween>
   
@@ -145,9 +179,26 @@ import {
             {comments.map((comment, i) => (
               <Box key={`${name}-${i}`}>
                 <Divider />
-                <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
-                  {comment}
-                </Typography>
+                <FlexBetween>
+                  <Typography>
+                    {comment}
+                  </Typography>
+                    <IconButton>
+                  <DeleteIcon onClick={ async () => {
+                    const response = await fetch (`http://localhost:3001/posts/comments/${postId}`, {
+                      method: "DELETE",
+                      headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                      },
+                      body: JSON.stringify({ comment: comment }),
+                    })
+                    await response.json();
+                    getPosts();
+                  }
+                    }/>
+                  </IconButton>
+                </FlexBetween>
               </Box>
             ))}
             <Divider />
