@@ -130,17 +130,19 @@ export const deletePost = async (req, res) => {
     }
 }
 
-export const searchQuery = async (req,res) => {
-    try {
-        const results = await Post.find({"description": "second"})
+export const searchPosts = async (req, res) => {
+    const data = await Post.find(
+        {
+            "$or" : [
+                {firstName: {$options: 'i', $regex: req.params.key} },
+                {description: {$options: 'i', $regex: req.params.key}},
+                {location: {$options: 'i', $regex: req.params.key}},
+            ]
+        }
+    )
 
-        res.status(200).json(results)
-    } catch (error) {
-        res.status(404).send(error)
-    }
+    console.log(req.params.key);
+
+    res.send(data)
 }
- /*
-const { userId } = req.params;
-const post = await Post.find({ userId });
-res.status(200).json(post);
-*/
+// above, $options: 'i', ignores case sensitivity! and $or returns if any of the statements match, e.g. firstName / location / description match the req params

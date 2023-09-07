@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom';
 import HomePage from './scenes/homePage';
 import LoginPage from './scenes/loginPage';
 import ProfilePage from './scenes/profilePage';
+import SearchPage from './scenes/searchPage';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { CssBaseline, ThemeProvider } from '@mui/material';
@@ -25,6 +26,7 @@ function App() {
             <Route path = "/" element={<LoginPage />} />
             <Route path = "/home" element={isAuth ? <HomePage /> : <Navigate to="/"/> } />
             <Route path = "/profile/:userId" element={isAuth ? <ProfilePage /> : <Navigate to="/"/> } /> {/* these two protected routes will only show is isAuth = True*/}
+            <Route path = "/home/search" element={isAuth ? <SearchPage /> : <Navigate to="/"/> } />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

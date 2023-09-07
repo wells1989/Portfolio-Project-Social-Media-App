@@ -24,8 +24,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { setMode, setLogout } from "state";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "components/FlexBetween";
+import { setSearchTerm } from "state";
 
-const Navbar = () => {
+export const Navbar = () => {
 
     const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false); // for small mobile screens
     const dispatch = useDispatch(); // allows you to dispatch actions from the state reducer (in state/index.js)
@@ -45,6 +46,10 @@ const Navbar = () => {
     const fullName = `${user.firstName} ${user.lastName}` // DEV NOTE: `${user.firstName} ${user.lastName}` (for testing, as for deployment only see the navbar once logged in with a user state, cannot read null properties)
     
     // grabs user from the state index.js file, e.g. see login payload, which becomes the user ...
+
+    const searchSetting = () => {
+      navigate('/home/search')
+    }
 
     return (
         /* site logo / search bar */
@@ -73,9 +78,9 @@ const Navbar = () => {
                 gap="3rem"
                 padding="0.1rem 1.5rem"
               >
-                <InputBase placeholder="Search..." />
+                <InputBase placeholder="Search..." onChange={(e) => setSearchTerm(e.target.value)}/>
                 <IconButton>
-                  <Search />
+                  <Search onClick={searchSetting}/>
                 </IconButton>
               </FlexBetween>
             )}
@@ -136,7 +141,6 @@ const Navbar = () => {
             >
               <Menu />
             </IconButton>
-            
           )}
 
         {/* Mobile Navigation*/}
@@ -208,4 +212,3 @@ const Navbar = () => {
       );
     };
     
-    export default Navbar;

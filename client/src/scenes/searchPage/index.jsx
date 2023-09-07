@@ -1,19 +1,26 @@
-import { Box, useMediaQuery} from "@mui/material";
-import { useSelector } from "react-redux";
+import { Box, useMediaQuery, Typography, Divider } from "@mui/material";
+import { useSelector } from "react-redux"; 
 import { Navbar } from "scenes/navbar";
 import UserWidget from "scenes/Widgets/UserWidget";
-import MyPostWidget from "scenes/Widgets/MyPostWidget";
+
 import PostsWidget from "scenes/Widgets/PostsWidget";
 import AdvertWidget from "scenes/Widgets/AdvertWidget";
 import FriendListWidget from "scenes/Widgets/FriendListWidget";
+import { setSearchTerm } from "state";
+import { useDispatch } from "react-redux";
 
-const HomePage = () => {
+const SearchPage = () => {
+
+    const dispatch = useDispatch();
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const { _id, picturePath } = useSelector((state) => state.user);
+    const searchTerm = useSelector((state) => state.searchTerm)
+    dispatch(setSearchTerm({ searchTerm: "simon" }));
 
     return (
         <Box>
             <Navbar />
+
             <Box
             width="100%"
             padding= "2rem 6%"
@@ -29,8 +36,22 @@ const HomePage = () => {
                flexBasis={ isNonMobileScreens ? "42%" : undefined }
                mt={ isNonMobileScreens ? undefined: "2rem"}
                >
-                <MyPostWidget picturePath={picturePath} />
-                <PostsWidget userId={_id} />
+                <Typography
+                sx={{
+                    textAlign: "center",
+                    fontWeight: "500",
+                    fontSize: "3rem",
+                    margin: "2rem"
+                }}
+                >
+
+                <Divider/>
+                    
+                    Search Results:
+                    <Divider/> 
+                    {searchTerm}
+                </Typography>
+                <PostsWidget userId={_id} searchTerm={searchTerm}/>
 
                </Box>
                {isNonMobileScreens && (
@@ -41,8 +62,9 @@ const HomePage = () => {
                 </Box> 
                )}
             </Box>
+            
         </Box>
     )
 }
 
-export default HomePage;
+export default SearchPage;

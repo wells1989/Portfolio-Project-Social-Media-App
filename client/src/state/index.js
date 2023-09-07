@@ -5,6 +5,7 @@ const initialState = {
     user: null,
     token: null,
     posts: [],
+    searchTerm: "",
 };
 
 // setting initial state globally i.e. light mode, null auth and posts to start
@@ -44,11 +45,14 @@ export const authSlice = createSlice({
         // i.e. only updating relevant post, identified by the payload, all others return original post
             });
             state.posts = updatedPosts;
+        },
+        setSearchTerm: (state, action) => {
+            state.searchTerm = action.payload.searchTerm
         }
     }
 })
 
-export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost, setLocation } = authSlice.actions; // allows the dispatch method to be used elsewhere
+export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost, setLocation, setSearchTerm } = authSlice.actions; // allows the dispatch method to be used elsewhere
 export default authSlice.reducer;
 
 // setting global state (so you can use it instead of importing it across multiple components etc)
