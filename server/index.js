@@ -65,11 +65,6 @@ app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
 
-app.get("/", verifyToken, (req, res) => {
-    res.json({msg: "home route"})
-}); // test route for middleware
-
-
 /* mongoose configuration */
 
 const PORT = process.env.PORT || 6001 // if .env variable doesn't work port goes to 6001

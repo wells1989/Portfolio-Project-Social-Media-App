@@ -15,7 +15,7 @@ const SearchPage = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const { _id, picturePath } = useSelector((state) => state.user);
     const searchTerm = useSelector((state) => state.searchTerm)
-    dispatch(setSearchTerm({ searchTerm: "simon" }));
+    dispatch(setSearchTerm({ searchTerm: "Simon" }));
 
     return (
         <Box>

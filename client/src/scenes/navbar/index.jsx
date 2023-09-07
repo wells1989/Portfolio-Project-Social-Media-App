@@ -67,7 +67,7 @@ export const Navbar = () => {
                 },
               }}
             >
-              Sociopedia
+              Socialpedia
             </Typography>
 
         {/*search bar, only shows for non-mobile screens*/}
