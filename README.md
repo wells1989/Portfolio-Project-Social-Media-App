@@ -147,9 +147,9 @@ This was a much more complex front-end than my previous projects, so for some of
 
 ### Project Goals
 
-- Get more comfortable with react components and both front and back end authentication
-- Introduce more features than my last project, making the website more interactive with multiple pages etc
-- Create more API calls from the front-end (likes / comments / searches etc)
+- To get more comfortable with react components and both front and back end authentication
+- To introduce more features than my last project, making the website more interactive with multiple pages etc
+- To create more API calls from the front-end (likes / comments / searches etc)
 
 ### Successes
 
@@ -161,7 +161,7 @@ This was a much more complex front-end than my previous projects, so for some of
 
 ### Areas to work on for next time
 
-- Some aspects of the site were hardcoded (e.g. the advert Widget / the search term to determine the SearchPage.) Instead of this, I could have anticipated this and built the site in a more condusive way to conduct searches using the state.searchTerm
+- Some aspects of the site were hardcoded (e.g. the advert Widget / the search term to determine the SearchPage.) Instead of this, I could have anticipated this and built the site in a more condusive way to conduct searches.
 - The comments delete button didn't filter for user, due to the initial Schema of the post.comments array. Next time I will take more time in thinking about the final functionality when designing the API to ensure tweaks like this do not re-occur.
 
 
