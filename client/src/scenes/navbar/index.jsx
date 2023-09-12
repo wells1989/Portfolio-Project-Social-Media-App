@@ -24,7 +24,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setMode, setLogout } from "state";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "components/FlexBetween";
-import { setSearchTerm } from "state";
 
 export const Navbar = () => {
 
@@ -78,7 +77,7 @@ export const Navbar = () => {
                 gap="3rem"
                 padding="0.1rem 1.5rem"
               >
-                <InputBase placeholder="Search..." onChange={(e) => setSearchTerm(e.target.value)}/>
+                <InputBase placeholder="Search..." />
                 <IconButton>
                   <Search onClick={searchSetting}/>
                 </IconButton>

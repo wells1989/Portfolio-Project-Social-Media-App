@@ -48,7 +48,7 @@ export const authSlice = createSlice({
         },
         setSearchTerm: (state, action) => {
             state.searchTerm = action.payload.searchTerm
-        }
+        },
     }
 })
 
