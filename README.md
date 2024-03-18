@@ -1,4 +1,4 @@
-# Socialmedia
+# Social media App
 
 This project was a more complex full stack social media application, using the MERN stack along with several front-end and back-end technologies / methods
 
